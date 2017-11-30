@@ -5,7 +5,7 @@
     <result column="id" jdbcType="BIGINT" property="id" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="grade_id" jdbcType="VARCHAR" property="gradeId" />
-    <result column="grade" jdbcType="INTEGER" property="grade" />
+    <result column="grade_value" jdbcType="INTEGER" property="gradeValue" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, grade_id, grade
+    id, user_id, grade_id, grade_value
   </sql>
   <select id="selectByExample" parameterType="com.yuan.springcloud.service.domain.mapper.GradeExample" resultMap="BaseResultMap">
     select
@@ -90,9 +90,9 @@
   </delete>
   <insert id="insert" parameterType="com.yuan.springcloud.service.domain.entity.Grade">
     insert into grade (id, user_id, grade_id, 
-      grade)
+      grade_value)
     values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{gradeId,jdbcType=VARCHAR}, 
-      #{grade,jdbcType=INTEGER})
+      #{gradeValue,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yuan.springcloud.service.domain.entity.Grade">
     insert into grade
@@ -106,8 +106,8 @@
       <if test="gradeId != null">
         grade_id,
       </if>
-      <if test="grade != null">
-        grade,
+      <if test="gradeValue != null">
+        grade_value,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -120,8 +120,8 @@
       <if test="gradeId != null">
         #{gradeId,jdbcType=VARCHAR},
       </if>
-      <if test="grade != null">
-        #{grade,jdbcType=INTEGER},
+      <if test="gradeValue != null">
+        #{gradeValue,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -143,8 +143,8 @@
       <if test="record.gradeId != null">
         grade_id = #{record.gradeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.grade != null">
-        grade = #{record.grade,jdbcType=INTEGER},
+      <if test="record.gradeValue != null">
+        grade_value = #{record.gradeValue,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -156,7 +156,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       user_id = #{record.userId,jdbcType=VARCHAR},
       grade_id = #{record.gradeId,jdbcType=VARCHAR},
-      grade = #{record.grade,jdbcType=INTEGER}
+      grade_value = #{record.gradeValue,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

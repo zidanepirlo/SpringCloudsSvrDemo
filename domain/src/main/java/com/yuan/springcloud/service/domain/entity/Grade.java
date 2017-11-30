@@ -7,7 +7,7 @@ public class Grade {
 
     private String gradeId;
 
-    private Integer grade;
+    private Integer gradeValue;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Grade {
         this.gradeId = gradeId == null ? null : gradeId.trim();
     }
 
-    public Integer getGrade() {
-        return grade;
+    public Integer getGradeValue() {
+        return gradeValue;
     }
 
-    public void setGrade(Integer grade) {
-        this.grade = grade;
+    public void setGradeValue(Integer gradeValue) {
+        this.gradeValue = gradeValue;
     }
 }
