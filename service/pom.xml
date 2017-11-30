@@ -3,24 +3,28 @@
     <parent>
         <artifactId>SpringCloudsSvrDemo</artifactId>
         <groupId>com.yuan.springcloud.service</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>service</artifactId>
-    <packaging>maven-plugin</packaging>
-    <name>service Maven Mojo</name>
-    <url>http://maven.apache.org</url>
+    <packaging>jar</packaging>
+    <name>service</name>
+
     <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>2.0</version>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.yuan.springcloud.service</groupId>
+            <artifactId>domain</artifactId>
+            <version>${domain.version}</version>
+        </dependency>
+
     </dependencies>
+
 </project>

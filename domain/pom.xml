@@ -3,14 +3,22 @@
     <parent>
         <artifactId>SpringCloudsSvrDemo</artifactId>
         <groupId>com.yuan.springcloud.service</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>domain</artifactId>
-    <packaging>maven-plugin</packaging>
-    <name>domain Maven Mojo</name>
-    <url>http://maven.apache.org</url>
+    <packaging>jar</packaging>
+    <name>domain</name>
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.yuan.springcloud.service</groupId>
+            <artifactId>common</artifactId>
+            <version>${commmon.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
@@ -22,5 +30,30 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+
     </dependencies>
+
 </project>
