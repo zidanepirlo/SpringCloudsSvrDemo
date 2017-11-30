@@ -2,14 +2,13 @@ package com.yuan.springcloud.service.controller.web;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.yuan.springcloud.service.domain.dao.IUserDao;
+import com.yuan.springcloud.service.domain.entity.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ComputeController {
@@ -19,7 +18,11 @@ public class ComputeController {
     @Autowired
     private DiscoveryClient client;
 
+    @Autowired
+    private IUserDao userDao;
+
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
+    @ResponseBody
     @HystrixCommand(fallbackMethod = "fallback",
             commandProperties = {
             @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
@@ -29,6 +32,17 @@ public class ComputeController {
         Integer r = a + b;
         logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
         return r;
+    }
+
+    @RequestMapping(value = "/getUserById" ,method = RequestMethod.GET)
+    @ResponseBody
+    @HystrixCommand(fallbackMethod = "fallback",
+            commandProperties = {
+                    @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
+            })
+    public User getUserById(@RequestParam String id) {
+        User user = userDao.findUserById(id);
+        return user;
     }
 
     public  void  fallback(){

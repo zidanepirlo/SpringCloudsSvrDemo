@@ -9,7 +9,5 @@ public interface IUserMapper {
 
     User findUserById(String id);
 
-    List<User> findAllUsers();
-
     int insertUser(User user);
 }
