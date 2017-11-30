@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IUserDao {
 
-    User findUserById(String id);
+    User findById(String id);
 
-    int insertUser(User user);
+    int insert(User user);
 }

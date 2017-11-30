@@ -4,6 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.yuan.springcloud.service.domain.dao.IUserDao;
 import com.yuan.springcloud.service.domain.entity.User;
+import com.yuan.springcloud.service.service.ITestService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -19,7 +20,7 @@ public class ComputeController {
     private DiscoveryClient client;
 
     @Autowired
-    private IUserDao userDao;
+    private ITestService testService;
 
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
     @ResponseBody
@@ -41,7 +42,7 @@ public class ComputeController {
                     @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
             })
     public User getUserById(@RequestParam String id) {
-        User user = userDao.findUserById(id);
+        User user = testService.getUserById(id);
         return user;
     }
 

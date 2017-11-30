@@ -5,7 +5,7 @@ import com.yuan.springcloud.service.domain.entity.User;
 
 import java.util.List;
 
-public interface IUserMapper {
+public interface UserMapper {
 
     User findUserById(String id);
 
