@@ -5,8 +5,8 @@ then
   exit 1
 fi
 #这里写自己服务的名字
-SERVICE_NAME="SpringCloudsSvrDemo"
-START_JAR="SpringCloudsSvrDemo.jar"
+SERVICE_NAME="SpringCloudSvrDemo"
+START_JAR="SpringCloudSvrDemo.jar"
 PID_FILE="$SERVICE_NAME.pid"
 BASE_DIR=$(dirname $0)
 LIB_DIR=$BASE_DIR/lib
@@ -28,7 +28,7 @@ JAVA_OPTS="${JAVA_OPT_1} ${JAVA_OPT_2} ${JAVA_OPT_4} ${JAVA_OPT_5} ${JAVA_OPT_6}
 
 JAVA="$JAVA_HOME/bin/java"
 #设定关键字，用来查找服务，stop时关闭服务
-KEYWORD="SpringCloudsSvrDemo"
+KEYWORD="SpringCloudSvrDemo"
 
 #nohup $JAVA $JAVA_OPTS com.alibaba.dubbo.container.Main  >> server_nohup.log 2>&1 & echo $! > $pidfile
 
