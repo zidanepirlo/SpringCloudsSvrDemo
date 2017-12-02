@@ -5,6 +5,7 @@ import com.yuan.springcloud.service.domain.dao.IUserDao;
 import com.yuan.springcloud.service.domain.entity.Grade;
 import com.yuan.springcloud.service.domain.entity.User;
 import com.yuan.springcloud.service.service.ITestService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TestServiceImpl implements ITestService {
+
+    private final Logger logger = Logger.getLogger(getClass());
 
     @Autowired
     private IUserDao userDao;

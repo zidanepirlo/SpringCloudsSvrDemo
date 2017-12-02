@@ -28,9 +28,9 @@ public class DistributedLock implements InitializingBean {
         try {
             long begin = System.nanoTime();
             do {
-                String result = jedisUtil.getObject().set(key, value, "NX", "PX", expireTime);
+                String result = jedisUtil.getRedisSource().set(key, value, "NX", "PX", expireTime);
                 if (StringUtils.equalsIgnoreCase("OK", result)) {
-                    logger.info("{}�ɹ���ȡ{}����,����������ʱ��Ϊ{}�� ", value, key, expireTime);
+                    logger.info("{} success get{} lock,set lock timeout {} second ", value, key, expireTime);
                     return Boolean.TRUE;
                 }
                 if (timeout == 0) {
@@ -47,7 +47,7 @@ public class DistributedLock implements InitializingBean {
 
     public Boolean releaseLock(String key) {
         try {
-            jedisUtil.getObject().del(key);
+            jedisUtil.getRedisSource().del(key);
         } catch (Throwable e) {
             logger.error(e.getMessage(), e);
             return Boolean.FALSE;
@@ -57,7 +57,7 @@ public class DistributedLock implements InitializingBean {
 
     public void afterPropertiesSet() throws Exception {
 
-        logger.info("DistributedLock ��ʼ����");
+        logger.info("DistributedLock init");
     }
 
 }

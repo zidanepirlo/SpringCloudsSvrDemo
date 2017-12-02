@@ -1,83 +1,75 @@
 package com.yuan.springcloud.service.common.util;
 
-
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.FactoryBean;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.io.Resource;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPoolConfig;
 
+import javax.annotation.PreDestroy;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class JedisUtil implements FactoryBean<JedisCluster>, InitializingBean {
+@Configuration
+@EnableConfigurationProperties(RedisProperties.class)
+public class JedisUtil implements InitializingBean {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = Logger.getLogger(getClass());
 
-    private Resource addressConfig;
-    private String addressKeyPrefix;
+    @Inject
+    private RedisProperties redisProperties;
+
     private JedisCluster jedisCluster;
-    private Integer timeout;
-    private Integer maxRedirections;
-    private GenericObjectPoolConfig poolConfig;
-    private Pattern p = Pattern.compile("^.+[:]\\d{1,5}\\s*$");
 
-    public JedisCluster getObject() {
+    @Bean
+    @Singleton
+    public JedisCluster getRedisSource() {
+
+        logger.info("init JedisCluster");
+        String[] serverArray = redisProperties.getClusterNodes().split(",");
+        Set<HostAndPort> nodes = new HashSet<>();
+
+        for (String ipPort : serverArray) {
+
+            String[] ipPortPair = ipPort.split(":");
+            String ip = ipPortPair[0].trim();
+            String port = ipPortPair[1].trim();
+            nodes.add(new HostAndPort(ip, Integer.valueOf(port)));
+        }
+
+        jedisCluster = new JedisCluster(nodes, Integer.valueOf(redisProperties.getTimeout().trim())
+                , Integer.valueOf(redisProperties.getMaxRedirections().trim()), getPoolConfig());
         return jedisCluster;
     }
 
-    public Class<? extends JedisCluster> getObjectType() {
-        return (this.jedisCluster != null ? this.jedisCluster.getClass() : JedisCluster.class);
+    @Bean
+    @Singleton
+    public GenericObjectPoolConfig getPoolConfig(){
+
+        logger.info("init JedisPoolConfig");
+        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+        poolConfig.setMaxIdle(Integer.parseInt(redisProperties.getMaxIdle().trim()));
+        poolConfig.setMaxWaitMillis(Long.parseLong(redisProperties.getMaxWait().trim()));
+        poolConfig.setTestOnBorrow(redisProperties.isTestOnBorrow());
+        poolConfig.setMaxTotal(Integer.parseInt(redisProperties.getMaxTotal().trim()));
+        poolConfig.setMinIdle(Integer.parseInt(redisProperties.getMinIdle().trim()));
+
+        return poolConfig;
     }
 
-    public boolean isSingleton() {
-        return true;
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
     }
 
-    private Set<HostAndPort> parseHostAndPort() {
-        try {
-            Properties prop = new Properties();
-            prop.load(this.addressConfig.getInputStream());
-
-            Set<HostAndPort> haps = new HashSet<HostAndPort>();
-            for (Object key : prop.keySet()) {
-
-                if (!((String) key).startsWith(addressKeyPrefix)) {
-                    continue;
-                }
-                String val = ((String) prop.get(key)).trim();
-                boolean isIpPort = p.matcher(val).matches();
-                if (!isIpPort) {
-                    throw new Exception("ip 或 port 不合法");
-                }
-                String[] ipAndPort = val.split(":");
-                HostAndPort hap = new HostAndPort(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
-                haps.add(hap);
-            }
-
-            return haps;
-        } catch (Exception ex) {
-            logger.error("加载 redis.properties 失败!");
-            logger.error(ex.getMessage(), ex);
-        }
-        return null;
-    }
-
-    public void afterPropertiesSet() {
-        try {
-            Set<HostAndPort> haps = this.parseHostAndPort();
-            jedisCluster = new JedisCluster(haps, timeout, maxRedirections, poolConfig);
-        } catch (Exception ex) {
-            logger.error("初始化 jedisCluster 失败!");
-            logger.error(ex.getMessage(), ex);
-        }
-    }
-
+    @PreDestroy
     public void closeJedisCluster() {
         logger.info("closeJedisCluster start!");
         try {
@@ -89,26 +81,4 @@ public class JedisUtil implements FactoryBean<JedisCluster>, InitializingBean {
             logger.error("closeJedisCluster exception", t);
         }
     }
-
-    public void setAddressConfig(Resource addressConfig) {
-        this.addressConfig = addressConfig;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
-    public void setMaxRedirections(int maxRedirections) {
-        this.maxRedirections = maxRedirections;
-    }
-
-    public void setAddressKeyPrefix(String addressKeyPrefix) {
-        this.addressKeyPrefix = addressKeyPrefix;
-    }
-
-    public void setGenericObjectPoolConfig(GenericObjectPoolConfig poolConfig) {
-        this.poolConfig = poolConfig;
-    }
-
-
 }
