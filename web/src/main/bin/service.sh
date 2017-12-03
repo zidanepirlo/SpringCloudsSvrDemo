@@ -24,7 +24,8 @@ JAVA_OPT_5="-Djava.ext.dirs=${JAVA_HOME}/jre/lib/ext"
 JAVA_OPT_6="-Xdebug -Xrunjdwp:transport=dt_socket,address=9555,server=y,suspend=n"
 JAVA_OPT_7="-cp ${CLASSPATH}"
 
-JAVA_OPTS="${JAVA_OPT_1} ${JAVA_OPT_2} ${JAVA_OPT_4} ${JAVA_OPT_5} ${JAVA_OPT_6} ${JAVA_OPT_7}"
+#JAVA_OPTS="${JAVA_OPT_1} ${JAVA_OPT_2} ${JAVA_OPT_4} ${JAVA_OPT_5} ${JAVA_OPT_6} ${JAVA_OPT_7}"
+JAVA_OPTS="${JAVA_OPT_1} ${JAVA_OPT_2} ${JAVA_OPT_4} ${JAVA_OPT_5} ${JAVA_OPT_7}"
 
 JAVA="$JAVA_HOME/bin/java"
 #设定关键字，用来查找服务，stop时关闭服务
