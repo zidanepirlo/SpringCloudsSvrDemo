@@ -17,7 +17,7 @@ if [ -z "$JAVA_HOME" ]; then
   JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
 fi
 
-JAVA_OPT_1="-server -Xms2g -Xmx2g -Xmn1g -XX:PermSize=128m -XX:MaxPermSize=320m"
+JAVA_OPT_1="-server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"
 JAVA_OPT_2="-XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSClassUnloadingEnabled -XX:SurvivorRatio=8 -XX:+DisableExplicitGC"
 JAVA_OPT_4="-XX:-OmitStackTraceInFastThrow"
 JAVA_OPT_5="-Djava.ext.dirs=${JAVA_HOME}/jre/lib/ext"
@@ -53,7 +53,7 @@ function startServiceProcess {
    rm -rf nohup.log
 
 #   nohup $JAVA $JAVA_OPTS $KEYWORD >> nohup.log 2>&1 & echo $! > $PID_FILE
-   nohup $JAVA -jar $START_JAR  >> nohup.log 2>&1 & echo $! > $PID_FILE
+   nohup $JAVA $JAVA_OPTS -jar $START_JAR  >> nohup.log 2>&1 & echo $! > $PID_FILE
 
    sleep 0.1
    pid="$(<$PID_FILE)"
