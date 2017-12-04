@@ -31,8 +31,6 @@ JAVA="$JAVA_HOME/bin/java"
 #设定关键字，用来查找服务，stop时关闭服务
 KEYWORD="SpringCloudSvrDemo"
 
-#nohup $JAVA $JAVA_OPTS com.alibaba.dubbo.container.Main  >> server_nohup.log 2>&1 & echo $! > $pidfile
-
 # Returns 0 if the process with PID $1 is running.
 function checkProcessIsRunning {
    local pid="$1"
