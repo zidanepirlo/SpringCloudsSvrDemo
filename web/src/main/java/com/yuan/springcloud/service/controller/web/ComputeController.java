@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ComputeController {
 
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
     @ResponseBody
-    @HystrixCommand(fallbackMethod = "fallback",
+    @HystrixCommand(fallbackMethod = "addFallback",
             commandProperties = {
             @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
     })
@@ -37,9 +38,14 @@ public class ComputeController {
         return r;
     }
 
+    public  Integer  addFallback(@RequestParam Integer a, @RequestParam Integer b){
+        logger.info("addFallback");
+        return 0;
+    }
+
     @RequestMapping(value = "/getUserById" ,method = RequestMethod.GET)
     @ResponseBody
-    @HystrixCommand(fallbackMethod = "fallback",
+    @HystrixCommand(fallbackMethod = "getUserByIdFallback",
             commandProperties = {
                     @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
             })
@@ -49,10 +55,18 @@ public class ComputeController {
         return user;
     }
 
+    User  getUserByIdFallback(@RequestParam String id){
+        User user = new User();
+        user.setId("0000");
+        user.setName("0000");
+        logger.info("getUserByIdFallback");
+        return user;
+    }
+
 
     @RequestMapping(value = "/addUserAndGrade" ,method = RequestMethod.POST)
     @ResponseBody
-    @HystrixCommand(fallbackMethod = "fallback",
+    @HystrixCommand(fallbackMethod = "addUserAndGradeFallback",
             commandProperties = {
                     @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
             })
@@ -80,8 +94,9 @@ public class ComputeController {
         return result;
     }
 
-    public  void  fallback(){
-        logger.info("fallback");
+    public Boolean addUserAndGradeFallback(String userId,String name,String gradeId,Integer grade_valeu){
+        logger.info("addUserAndGradeFallback");
+        return Boolean.FALSE;
     }
 
 }
