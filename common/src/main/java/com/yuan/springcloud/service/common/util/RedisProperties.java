@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-@ConfigurationProperties(prefix = "redis")
+@ConfigurationProperties(prefix = "spring.redis.cache")
 @Setter
 @Getter
 public class RedisProperties implements InitializingBean {
@@ -26,7 +26,7 @@ public class RedisProperties implements InitializingBean {
     private String maxIdle;
     private String maxActive;
     private String maxWait;
-    private String timeout;
+    private String commandTimeout;
     private String maxTotal;
     private String minIdle;
     private boolean testOnBorrow;
@@ -43,7 +43,7 @@ public class RedisProperties implements InitializingBean {
         logger.info("maxIdle : "+maxIdle);
         logger.info("maxActive : "+maxActive);
         logger.info("maxWait : "+maxWait);
-        logger.info("timeout : "+timeout);
+        logger.info("commandTimeout : "+commandTimeout);
         logger.info("maxTotal : "+maxTotal);
         logger.info("minIdle : "+minIdle);
         logger.info("testOnBorrow : "+testOnBorrow);

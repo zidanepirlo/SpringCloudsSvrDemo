@@ -6,6 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
@@ -30,7 +31,7 @@ public class JedisUtil implements InitializingBean {
 
     @Bean
     @Singleton
-    public JedisCluster getRedisSource() {
+    public JedisCluster initRedisSource() {
 
         logger.info("init JedisCluster");
         String[] serverArray = redisProperties.getClusterNodes().split(",");
@@ -44,7 +45,7 @@ public class JedisUtil implements InitializingBean {
             nodes.add(new HostAndPort(ip, Integer.valueOf(port)));
         }
 
-        jedisCluster = new JedisCluster(nodes, Integer.valueOf(redisProperties.getTimeout().trim())
+        jedisCluster = new JedisCluster(nodes, Integer.valueOf(redisProperties.getCommandTimeout().trim())
                 , Integer.valueOf(redisProperties.getMaxRedirections().trim()), getPoolConfig());
         return jedisCluster;
     }
@@ -63,6 +64,11 @@ public class JedisUtil implements InitializingBean {
 
         return poolConfig;
     }
+
+    public JedisCluster getRedisSource() {
+        return jedisCluster;
+    }
+
 
     @Override
     public void afterPropertiesSet() throws Exception {

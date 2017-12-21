@@ -59,4 +59,17 @@ public class CacheServiceImpl implements ICacheService{
         }
         return Boolean.TRUE;
     }
+
+    @Override
+    public String get(String key) {
+
+        String value = null;
+        try{
+            value = jedisUtil.getRedisSource().get(key);
+        }catch (Throwable e){
+            logger.error(e.getMessage(),e);
+        }
+
+        return value;
+    }
 }

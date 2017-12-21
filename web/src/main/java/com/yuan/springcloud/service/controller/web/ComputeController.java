@@ -5,6 +5,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.yuan.springcloud.service.domain.dao.IUserDao;
 import com.yuan.springcloud.service.domain.entity.Grade;
 import com.yuan.springcloud.service.domain.entity.User;
+import com.yuan.springcloud.service.service.ICacheService;
 import com.yuan.springcloud.service.service.ITestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,9 @@ public class ComputeController {
     @Autowired
     private ITestService testService;
 
+    @Autowired
+    private ICacheService cacheService;
+
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
     @ResponseBody
     @HystrixCommand(fallbackMethod = "addFallback",
@@ -39,7 +43,7 @@ public class ComputeController {
     }
 
     public  Integer  addFallback(@RequestParam Integer a, @RequestParam Integer b){
-        logger.info("addFallback");
+        logger.error("addFallback");
         return 0;
     }
 
@@ -59,7 +63,7 @@ public class ComputeController {
         User user = new User();
         user.setId("0000");
         user.setName("0000");
-        logger.info("getUserByIdFallback");
+        logger.error("getUserByIdFallback");
         return user;
     }
 
@@ -95,8 +99,26 @@ public class ComputeController {
     }
 
     public Boolean addUserAndGradeFallback(String userId,String name,String gradeId,Integer grade_valeu){
-        logger.info("addUserAndGradeFallback");
+        logger.error("addUserAndGradeFallback");
         return Boolean.FALSE;
+    }
+
+    @RequestMapping(value = "/testRedis" ,method = RequestMethod.GET)
+    @ResponseBody
+    @HystrixCommand(fallbackMethod = "testRedisFallback",
+            commandProperties = {
+                    @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
+            })
+    public String testRedis(@RequestParam String key){
+       String value =  cacheService.get(key);
+       logger.info("testRedis,key={}, value={}",key,value);
+       return value;
+    }
+
+
+    public String testRedisFallback(@RequestParam String key){
+        logger.error("testRedisFallback, key={}",key);
+        return null;
     }
 
 }
