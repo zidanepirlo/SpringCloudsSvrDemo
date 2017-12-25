@@ -45,22 +45,29 @@ public class JedisUtil implements InitializingBean {
             nodes.add(new HostAndPort(ip, Integer.valueOf(port)));
         }
 
-        jedisCluster = new JedisCluster(nodes, Integer.valueOf(redisProperties.getCommandTimeout().trim())
+        jedisCluster = new JedisCluster(nodes, Integer.valueOf(redisProperties.getTimeout().trim())
                 , Integer.valueOf(redisProperties.getMaxRedirections().trim()), getPoolConfig());
         return jedisCluster;
     }
 
     @Bean
     @Singleton
-    public GenericObjectPoolConfig getPoolConfig(){
+    public JedisPoolConfig getPoolConfig() {
 
         logger.info("init JedisPoolConfig");
-        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
-        poolConfig.setMaxIdle(Integer.parseInt(redisProperties.getMaxIdle().trim()));
-        poolConfig.setMaxWaitMillis(Long.parseLong(redisProperties.getMaxWait().trim()));
-        poolConfig.setTestOnBorrow(redisProperties.isTestOnBorrow());
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+
         poolConfig.setMaxTotal(Integer.parseInt(redisProperties.getMaxTotal().trim()));
         poolConfig.setMinIdle(Integer.parseInt(redisProperties.getMinIdle().trim()));
+        poolConfig.setMaxWaitMillis(Long.parseLong(redisProperties.getMaxWait().trim()));
+        poolConfig.setMaxIdle(Integer.parseInt(redisProperties.getMaxIdle().trim()));
+        poolConfig.setTestOnBorrow(redisProperties.getTestOnBorrow());
+        poolConfig.setTestOnReturn(redisProperties.getTestOnReturn());
+        poolConfig.setTestWhileIdle(redisProperties.getTestWhileIdle());
+        poolConfig.setMinEvictableIdleTimeMillis(Long.parseLong(redisProperties.getMinEvictableIdleTimeMillis().trim()));
+        poolConfig.setNumTestsPerEvictionRun(Integer.parseInt(redisProperties.getNumTestsPerEvictionRun().trim()));
+        poolConfig.setSoftMinEvictableIdleTimeMillis(Long.parseLong(redisProperties.getSoftMinEvictableIdleTimeMillis().trim()));
+        poolConfig.setTimeBetweenEvictionRunsMillis(Long.parseLong(redisProperties.getTimeBetweenEvictionRunsMillis().trim()));
 
         return poolConfig;
     }

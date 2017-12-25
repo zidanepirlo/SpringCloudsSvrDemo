@@ -20,34 +20,42 @@ public class RedisProperties implements InitializingBean {
     private final Logger logger = Logger.getLogger(getClass());
 
     private String clusterNodes;
-    private String host;
     private String serverPort;
     private String password;
     private String maxIdle;
-    private String maxActive;
     private String maxWait;
-    private String commandTimeout;
+    private String timeout;
     private String maxTotal;
     private String minIdle;
-    private boolean testOnBorrow;
+    private Boolean testOnBorrow;
+    private Boolean testOnReturn;
+    private Boolean testWhileIdle;
     private String maxRedirections;
+    private String minEvictableIdleTimeMillis;
+    private String numTestsPerEvictionRun;
+    private String softMinEvictableIdleTimeMillis;
+    private String timeBetweenEvictionRunsMillis;
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
         logger.info("redis cluster init begin");
         logger.info("clusterNodes : "+clusterNodes);
-        logger.info("host : "+host);
         logger.info("serverPort : "+serverPort);
         logger.info("password : "+password);
         logger.info("maxIdle : "+maxIdle);
-        logger.info("maxActive : "+maxActive);
         logger.info("maxWait : "+maxWait);
-        logger.info("commandTimeout : "+commandTimeout);
+        logger.info("timeout : "+timeout);
         logger.info("maxTotal : "+maxTotal);
         logger.info("minIdle : "+minIdle);
         logger.info("testOnBorrow : "+testOnBorrow);
+        logger.info("testOnReturn : "+testOnReturn);
+        logger.info("testWhileIdle : "+testWhileIdle);
         logger.info("maxRedirections : "+maxRedirections);
+        logger.info("minEvictableIdleTimeMillis : "+minEvictableIdleTimeMillis);
+        logger.info("numTestsPerEvictionRun : "+numTestsPerEvictionRun);
+        logger.info("softMinEvictableIdleTimeMillis : "+softMinEvictableIdleTimeMillis);
+        logger.info("timeBetweenEvictionRunsMillis : "+timeBetweenEvictionRunsMillis);
         logger.info("redis cluster init end");
     }
 
