@@ -15,13 +15,11 @@
         <dependency>
             <groupId>com.yuan.springcloud.service</groupId>
             <artifactId>service</artifactId>
-            <version>${service.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.yuan.springcloud.service</groupId>
             <artifactId>domain</artifactId>
-            <version>${domain.version}</version>
         </dependency>
 
         <dependency>
@@ -94,6 +92,11 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yuan.springcloud</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
         </dependency>
 
     </dependencies>

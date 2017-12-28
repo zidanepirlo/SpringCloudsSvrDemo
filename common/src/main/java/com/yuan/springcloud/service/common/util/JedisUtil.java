@@ -3,10 +3,13 @@ package com.yuan.springcloud.service.common.util;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
@@ -20,11 +23,11 @@ import java.util.regex.Pattern;
 
 @Configuration
 @EnableConfigurationProperties(RedisProperties.class)
-public class JedisUtil implements InitializingBean {
+public class JedisUtil {
 
     private final Logger logger = Logger.getLogger(getClass());
 
-    @Inject
+    @Autowired
     private RedisProperties redisProperties;
 
     private JedisCluster jedisCluster;
@@ -69,6 +72,24 @@ public class JedisUtil implements InitializingBean {
         poolConfig.setSoftMinEvictableIdleTimeMillis(Long.parseLong(redisProperties.getSoftMinEvictableIdleTimeMillis().trim()));
         poolConfig.setTimeBetweenEvictionRunsMillis(Long.parseLong(redisProperties.getTimeBetweenEvictionRunsMillis().trim()));
 
+        logger.info("clusterNodes : "+redisProperties.getClusterNodes());
+        logger.info("serverPort : "+redisProperties.getServerPort());
+        logger.info("password : "+redisProperties.getPassword());
+        logger.info("maxIdle : "+redisProperties.getMaxIdle());
+        logger.info("maxWait : "+redisProperties.getMaxWait());
+        logger.info("timeout : "+redisProperties.getTimeout());
+        logger.info("maxTotal : "+redisProperties.getMaxTotal());
+        logger.info("minIdle : "+redisProperties.getMinIdle());
+        logger.info("testOnBorrow : "+redisProperties.getTestOnBorrow());
+        logger.info("testOnReturn : "+redisProperties.getTestOnReturn());
+        logger.info("testWhileIdle : "+redisProperties.getTestWhileIdle());
+        logger.info("maxRedirections : "+redisProperties.getMaxRedirections());
+        logger.info("minEvictableIdleTimeMillis : "+redisProperties.getMinEvictableIdleTimeMillis());
+        logger.info("numTestsPerEvictionRun : "+redisProperties.getNumTestsPerEvictionRun());
+        logger.info("softMinEvictableIdleTimeMillis : "+redisProperties.getSoftMinEvictableIdleTimeMillis());
+        logger.info("timeBetweenEvictionRunsMillis : "+redisProperties.getTimeBetweenEvictionRunsMillis());
+        logger.info("init JedisPoolConfig end");
+
         return poolConfig;
     }
 
@@ -76,15 +97,9 @@ public class JedisUtil implements InitializingBean {
         return jedisCluster;
     }
 
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
-    }
-
     @PreDestroy
     public void closeJedisCluster() {
-        logger.info("closeJedisCluster start!");
+        logger.info("closeJedisCluster!");
         try {
             if (jedisCluster != null) {
                 jedisCluster.close();

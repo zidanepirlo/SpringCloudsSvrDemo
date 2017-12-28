@@ -2,11 +2,15 @@ package com.yuan.springcloud.service.controller.web;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.yuan.springcloud.Interface.DefSCMQProducer;
+import com.yuan.springcloud.Interface.DefSCMQPushConsumerConcurrently;
 import com.yuan.springcloud.service.domain.dao.IUserDao;
 import com.yuan.springcloud.service.domain.entity.Grade;
 import com.yuan.springcloud.service.domain.entity.User;
 import com.yuan.springcloud.service.service.ICacheService;
 import com.yuan.springcloud.service.service.ITestService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,24 @@ public class ComputeController {
 
     @Autowired
     private ICacheService cacheService;
+
+    @Autowired
+    private DefSCMQProducer defSCMQProducer;
+
+
+    @RequestMapping(value = "/testDefSCMQProducer" ,method = RequestMethod.GET)
+    @ResponseBody
+    public String testDefSCMQProducer(){
+
+        SendResult sendResult = null;
+        try {
+            sendResult = defSCMQProducer.sendMsg("yuan"+(new java.util.Random()).nextInt(),"qing"+(new java.util.Random()).nextInt());
+        }catch (Exception ex){
+            logger.error(ex.getMessage(),ex);
+            return "fail";
+        }
+        return sendResult == null? "fail":sendResult.toString();
+    }
 
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
     @ResponseBody
