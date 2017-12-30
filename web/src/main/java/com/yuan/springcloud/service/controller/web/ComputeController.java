@@ -33,23 +33,23 @@ public class ComputeController {
     @Autowired
     private ICacheService cacheService;
 
-    @Autowired
-    private DefSCMQProducer defSCMQProducer;
+//    @Autowired
+//    private DefSCMQProducer defSCMQProducer;
 
 
-    @RequestMapping(value = "/testDefSCMQProducer" ,method = RequestMethod.GET)
-    @ResponseBody
-    public String testDefSCMQProducer(){
-
-        SendResult sendResult = null;
-        try {
-            sendResult = defSCMQProducer.sendMsg("yuan"+(new java.util.Random()).nextInt(),"qing"+(new java.util.Random()).nextInt());
-        }catch (Exception ex){
-            logger.error(ex.getMessage(),ex);
-            return "fail";
-        }
-        return sendResult == null? "fail":sendResult.toString();
-    }
+//    @RequestMapping(value = "/testDefSCMQProducer" ,method = RequestMethod.GET)
+//    @ResponseBody
+//    public String testDefSCMQProducer(){
+//
+//        SendResult sendResult = null;
+//        try {
+//            sendResult = defSCMQProducer.sendMsg("yuan"+(new java.util.Random()).nextInt(),"qing"+(new java.util.Random()).nextInt());
+//        }catch (Exception ex){
+//            logger.error(ex.getMessage(),ex);
+//            return "fail";
+//        }
+//        return sendResult == null? "fail":sendResult.toString();
+//    }
 
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
     @ResponseBody

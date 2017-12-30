@@ -1,7 +1,7 @@
 package com.yuan.springcloud.service.service.Impl;
 
 import com.yuan.springcloud.Interface.DefSCMQPushConsumerConcurrently;
-import com.yuan.springcloud.Interface.RbMsgConcurrentlyListener;
+import com.yuan.springcloud.Interface.RbMsgListener;
 import com.yuan.springcloud.entity.ConsumerMsg;
 import com.yuan.springcloud.service.service.IRocketMQService;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -19,8 +19,8 @@ public class RocketMQServiceImpl implements IRocketMQService{
 
     private final Logger logger = LoggerFactory.getLogger(RocketMQServiceImpl.class);
 
-    @Autowired
-    private DefSCMQPushConsumerConcurrently defSCMQPushConsumerConcurrently;
+//    @Autowired
+//    private DefSCMQPushConsumerConcurrently defSCMQPushConsumerConcurrently;
 
     @Override
     public void testDefPushConsumer() {
@@ -31,18 +31,18 @@ public class RocketMQServiceImpl implements IRocketMQService{
     @PostConstruct
     public void init(){
 
-            defSCMQPushConsumerConcurrently.startup(
-                    new RbMsgConcurrentlyListener(){
-
-                @Override
-                public void consumeMessage(List<ConsumerMsg> list) {
-
-                        for (ConsumerMsg consumerMsg:list){
-                            logger.info("receive msg:"+consumerMsg.getBody()+","+consumerMsg.getTopic()+","+consumerMsg.getTags());
-                        }
-                }
-            }
-            );
+//            defSCMQPushConsumerConcurrently.startup(
+//                    new RbMsgListener(){
+//
+//                @Override
+//                public void consumeMessage(List<ConsumerMsg> list) {
+//
+//                        for (ConsumerMsg consumerMsg:list){
+//                            logger.info("receive msg:"+consumerMsg.getBody()+","+consumerMsg.getTopic()+","+consumerMsg.getTags());
+//                        }
+//                }
+//            }
+//            );
 
     }
 
