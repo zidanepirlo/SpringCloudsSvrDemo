@@ -18,6 +18,11 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class ComputeController {
@@ -32,6 +37,9 @@ public class ComputeController {
 
     @Autowired
     private ICacheService cacheService;
+
+    @Autowired
+    private RestTemplate template;
 
 //    @Autowired
 //    private DefSCMQProducer defSCMQProducer;
@@ -50,6 +58,33 @@ public class ComputeController {
 //        }
 //        return sendResult == null? "fail":sendResult.toString();
 //    }
+
+    @RequestMapping(value = "/dependencyTest" ,method = RequestMethod.GET)
+    @ResponseBody
+    @HystrixCommand(fallbackMethod = "dependencyTestFallback",
+            commandProperties = {
+                    @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
+            })
+    public User dependencyTest(@RequestParam String id) throws Exception{
+
+        try{
+            Map<String, Object> uriVariables = new HashMap<String, Object>();
+            uriVariables.put("id", "1");
+            User user = this.template.getForObject("http://localhost:5555/demo2/getUserById?id={id}",User.class,uriVariables);
+//            User user = this.template.getForObject("http://localhost:4111/getUserById?id={id}",User.class,uriVariables);
+            logger.info("dependencyTest, user={}",user);
+            return user;
+        }catch (Exception ex){
+            logger.error("系统内部异常！");
+            logger.error(ex.getMessage(),ex);
+            throw new Exception("系统内部异常！",ex);
+        }
+    }
+
+    public  User  dependencyTestFallback(@RequestParam String id){
+        logger.error("dependencyTestFallback, id={}",id);
+        return null;
+    }
 
     @RequestMapping(value = "/add" ,method = RequestMethod.GET)
     @ResponseBody

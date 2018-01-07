@@ -197,6 +197,19 @@
         <version>1.0-SNAPSHOT</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-zipkin</artifactId>
+        <version>RELEASE</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+        <version>RELEASE</version>
+      </dependency>
+
+
       <!--<dependency>-->
       <!--<groupId>org.redisson</groupId>-->
       <!--<artifactId>redisson</artifactId>-->
